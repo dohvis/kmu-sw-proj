@@ -20,4 +20,4 @@ while True:
             print("Do not enter the negative number except -1")
         else:
             result = factorial(number)
-            print("%d! = %d" %(number,result))
+            print("%d! = %d" % (number, result))
