@@ -5,7 +5,6 @@ def factorial(num):
         num -= 1
     return res
 
-number = 0
 
 while True:
     try:
