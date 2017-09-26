@@ -8,12 +8,12 @@ class App:
 
         try:
             self.fp = open(self.filename, "rb")
+            self.memory = pickle.load(self.fp)
         except FileNotFoundError:
             print("[+] Create file based DB: {}".format(self.filename))
-            self.fp = open(self.filename, "wb").close()
-
+            open(self.filename, "wb").close()
+            self.fp = open(self.filename, "rb")
         print("Open db: {}".format(self.filename))
-        self.memory = pickle.load(self.fp)
         self.fp.close()
 
     def _get_index(self, name):
