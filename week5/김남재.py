@@ -3,8 +3,8 @@ import time
 
 def fibo_list(n):
     fibolist = [0, 1]
-    for i in range(2, n + 1):
-        fibolist.append(fibolist[i - 1] + fibolist[i - 2])
+    for i in range(1, n):
+        fibolist.append(fibolist[i] + fibolist[i - 1])
     return fibolist[n]
 def fibo_value(n):
     a, b = 0, 1
@@ -14,7 +14,7 @@ def fibo_value(n):
 def fibo_rec(n):
     if n<=1:
         return n
-    return fiborec(n - 1) + fiborec(n - 2)
+    return fibo_rec(n - 1) + fibo_rec(n - 2)
 def profile(func, nbr):
     ts = time.time()
     fibonum = func(nbr)
