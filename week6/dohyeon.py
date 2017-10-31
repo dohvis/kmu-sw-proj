@@ -3,13 +3,13 @@ import sys
 from PyQt5.QtWidgets import (
     QWidget, QPushButton,
     QHBoxLayout, QVBoxLayout, QApplication, QLabel,
-    QComboBox, QTextEdit, QLineEdit, QMainWindow
+    QComboBox, QTextEdit, QLineEdit,
 )
 
 
 def createQHBoxLayout(widgets):
     layoutBox = QHBoxLayout()
-    layoutBox.addStretch(1)
+    # layoutBox.addStretch(1)
     for widget in widgets:
         layoutBox.addWidget(widget)
     return layoutBox
@@ -62,7 +62,7 @@ class ScoreManagement(QWidget):
         delButton.clicked.connect(self.del_)
 
         findButton = QPushButton('Find', self)
-        findButton.clicked.connect(self.find)
+        findButton.clicked.connect(self.find_)
 
         incButton = QPushButton('Inc', self)
         incButton.clicked.connect(self.inc)
@@ -83,31 +83,37 @@ class ScoreManagement(QWidget):
     def renderResult(self):
         resultString = ''
         for row in self.scoreDB:
-            resultString += '{} {} {}\n'.format(row['name'], row['age'], row['score'])
+            resultString += 'Name={} Age={} Score={}\n'.format(row['name'], row['age'], row['score'])
         self.resultForm.setText(resultString)
 
     def add(self):
         name, age, score = [form.text() for form in (self.nameForm, self.ageForm, self.scoreForm)]
-        self.scoreDB.append({"name": name, "age": age, "score": score})
+        try:
+            self.scoreDB.append({"name": name, "age": int(age), "score": int(score)})
+        except ValueError:
+            print("Int only")
         self.renderResult()
 
     def del_(self):
         name = self.nameForm.text()
-        index = self.findIndex(name)
-        del self.scoreDB[index]
+        indices = self.findIndices(name)
+        for index in indices:
+            del self.scoreDB[index]
         self.renderResult()
 
-    def find(self):
+    def find_(self):
         name = self.nameForm.text()
         tmp = self.scoreDB
         self.scoreDB = filter(lambda x: x['name'] == name, self.scoreDB)
         self.renderResult()
         self.scoreDB = tmp
 
-    def findIndex(self, name):
-        for i, row in enumerate(self.scoreDB):
-            if row['name'] == name:
-                return i
+    def findIndices(self, name):
+        indices = []
+        return [i for i, row in enumerate(self.scoreDB) if row['name'] == name]
+        #     if row['name'] == name:
+        #         indices.append(i)
+        # return indices
 
     def inc(self):
         name = self.nameForm.text()
@@ -137,7 +143,7 @@ class ScoreManagement(QWidget):
         try:
             self.scoreDB = pickle.load(fH)
         except:
-            pass
+            print("Error to loading")
         else:
             pass
         fH.close()
@@ -159,7 +165,7 @@ class ScoreManagement(QWidget):
         infoBox, optionBox, actionBox, resultBox = [createQHBoxLayout(widgets) for widgets in componentWidgets]
 
         vbox = QVBoxLayout()
-        vbox.addStretch(1)
+        # vbox.addStretch(1)
         for box in (infoBox, optionBox, actionBox, resultBox):
             vbox.addLayout(box)
         self.setLayout(vbox)
