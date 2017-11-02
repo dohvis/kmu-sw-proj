@@ -97,7 +97,7 @@ class ScoreManagement(QWidget):
     def del_(self):
         name = self.nameForm.text()
         indices = self.findIndices(name)
-        for index in indices:
+        for index in indices[-1::-1]:
             del self.scoreDB[index]
         self.renderResult()
 
