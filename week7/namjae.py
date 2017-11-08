@@ -30,9 +30,8 @@ class Calculator(QWidget):
         self.display.setMaxLength(15)
 
         # Digit Buttons
-        self.digitButton = [x for x in range(0, 10)]
-        for i in range(len(self.digitButton)):
-            self.digitButton[i] = Button(str(i), self.buttonClicked)
+        self.digitButton = [Button(str(x), self.buttonClicked) for x in range(0, 10)]
+
 
         # . and = Buttons
         self.decButton = Button('.', self.buttonClicked)
@@ -63,15 +62,6 @@ class Calculator(QWidget):
             numLayout.addWidget(self.digitButton[i], 2 - ((i-1) // 3), ((i-1) % 3))
 
         numLayout.addWidget(self.digitButton[0], 3, 0)
-        # numLayout.addWidget(self.digitButton[1], 2, 0)
-        # numLayout.addWidget(self.digitButton[2], 2, 1)
-        # numLayout.addWidget(self.digitButton[3], 2, 2)
-        # numLayout.addWidget(self.digitButton[4], 1, 0)
-        # numLayout.addWidget(self.digitButton[5], 1, 1)
-        # numLayout.addWidget(self.digitButton[6], 1, 2)
-        # numLayout.addWidget(self.digitButton[7], 0, 0)
-        # numLayout.addWidget(self.digitButton[8], 0, 1)
-        # numLayout.addWidget(self.digitButton[9], 0, 2)
 
         numLayout.addWidget(self.decButton, 3, 1)
         numLayout.addWidget(self.eqButton, 3, 2)
