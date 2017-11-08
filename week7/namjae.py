@@ -4,8 +4,11 @@ from PyQt5.QtWidgets import QLineEdit, QToolButton
 from PyQt5.QtWidgets import QSizePolicy
 from PyQt5.QtWidgets import QLayout, QGridLayout
 
+from keypad import numPadList, operatorList, constantDic, functionDic
+import calcFunctions
 
 class Button(QToolButton):
+
     def __init__(self, text, callback):
         super().__init__()
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
@@ -20,88 +23,81 @@ class Button(QToolButton):
 
 
 class Calculator(QWidget):
+
     def __init__(self, parent=None):
         super().__init__(parent)
 
         # Display Window
-        self.display = QLineEdit('0')
+        self.display = QLineEdit()
         self.display.setReadOnly(True)
         self.display.setAlignment(Qt.AlignRight)
         self.display.setMaxLength(15)
 
-        # Digit Buttons
-        self.digitButton = [Button(str(x), self.buttonClicked) for x in range(0, 10)]
+        # Button Creation and Placement
+        numLayout = QGridLayout()
+        opLayout = QGridLayout()
+        constLayout = QGridLayout()
+        funcLayout = QGridLayout()
 
+        buttonGroups = {
+            'num': {'buttons': numPadList, 'layout': numLayout},
+            'op': {'buttons': operatorList, 'layout': opLayout},
+            'constants': {'buttons': [[x] for x in constantDic.keys()], 'layout': constLayout},
+            'functions': {'buttons': [[x] for x in functionDic.keys()], 'layout': funcLayout},
+        }
 
-        # . and = Buttons
-        self.decButton = Button('.', self.buttonClicked)
-        self.eqButton = Button('=', self.buttonClicked)
-
-        # Operator Buttons
-        self.mulButton = Button('*', self.buttonClicked)
-        self.divButton = Button('/', self.buttonClicked)
-        self.addButton = Button('+', self.buttonClicked)
-        self.subButton = Button('-', self.buttonClicked)
-
-        # Parentheses Buttons
-        self.lparButton = Button('(', self.buttonClicked)
-        self.rparButton = Button(')', self.buttonClicked)
-
-        # Clear Button
-        self.clearButton = Button('C', self.buttonClicked)
+        for label in buttonGroups.keys():
+            buttonPad = buttonGroups[label]
+            for row, btn_list in enumerate(buttonPad['buttons']):
+                for col, btnText in enumerate(btn_list):
+                    button = Button(btnText, self.buttonClicked)
+                    buttonPad['layout'].addWidget(button, row, col)
 
         # Layout
         mainLayout = QGridLayout()
         mainLayout.setSizeConstraint(QLayout.SetFixedSize)
 
         mainLayout.addWidget(self.display, 0, 0, 1, 2)
-
-        numLayout = QGridLayout()
-
-        for i in range(1, len(self.digitButton)):
-            numLayout.addWidget(self.digitButton[i], 2 - ((i-1) // 3), ((i-1) % 3))
-
-        numLayout.addWidget(self.digitButton[0], 3, 0)
-
-        numLayout.addWidget(self.decButton, 3, 1)
-        numLayout.addWidget(self.eqButton, 3, 2)
-
         mainLayout.addLayout(numLayout, 1, 0)
-
-        opLayout = QGridLayout()
-
-        opLayout.addWidget(self.mulButton, 0, 0)
-        opLayout.addWidget(self.divButton, 0, 1)
-        opLayout.addWidget(self.addButton, 1, 0)
-        opLayout.addWidget(self.subButton, 1, 1)
-
-        opLayout.addWidget(self.lparButton, 2, 0)
-        opLayout.addWidget(self.rparButton, 2, 1)
-
-        opLayout.addWidget(self.clearButton, 3, 0)
-
         mainLayout.addLayout(opLayout, 1, 1)
+        mainLayout.addLayout(constLayout, 2, 0)
+        mainLayout.addLayout(funcLayout, 2, 1)
 
         self.setLayout(mainLayout)
 
         self.setWindowTitle("My Calculator")
 
+
     def buttonClicked(self):
+        except_list = ['Error!', '0']
+        if self.display.text() in except_list:
+            self.display.setText('')
+
         button = self.sender()
         key = button.text()
 
+        key_dic = {}
+
         if key == '=':
-            result = str(eval(self.display.text()))
+            try:
+                result = str(eval(self.display.text()))
+            except:
+                result = 'Error!'
             self.display.setText(result)
         elif key == 'C':
-            self.display.setText('0')
+            self.display.clear()
+        elif key in constantDic.keys():
+            self.display.setText(self.display.text() + constantDic[key])
+        elif key in functionDic.keys():
+            n = eval(self.display.text())
+            value = eval(functionDic[key])
+            self.display.setText(str(value))
         else:
-            if self.display.text() == '0':
-                self.display.setText("")
-            self.display.setText(self.display.text()+key)
+            self.display.setText(self.display.text() + key)
 
 
 if __name__ == '__main__':
+
     import sys
 
     app = QApplication(sys.argv)
