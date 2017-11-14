@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QLineEdit, QToolButton
 from PyQt5.QtWidgets import QSizePolicy
 from PyQt5.QtWidgets import QLayout, QGridLayout
 
-from keypad import numPadList, operatorList, constantList, constantDics, functionList
+from keypad import numPadList, operatorList, constantDics, functionDics
 import calcFunctions
 
 class Button(QToolButton):
@@ -44,8 +44,8 @@ class Calculator(QWidget):
         buttonGroups = {
             'num': {'buttons': numPadList, 'layout': numLayout, 'columns': 3},
             'op': {'buttons': operatorList, 'layout': opLayout, 'columns': 2},
-            'constants': {'buttons': constantList, 'layout': constLayout, 'columns': 1},
-            'functions': {'buttons': functionList, 'layout': funcLayout, 'columns': 1},  # 끝에 , 는 밑에 쉽게 추가해서 사용가능하다는 것을 의미.
+            'constants': {'buttons': constantDics, 'layout': constLayout, 'columns': 1},
+            'functions': {'buttons': functionDics, 'layout': funcLayout, 'columns': 1},  # 끝에 , 는 밑에 쉽게 추가해서 사용가능하다는 것을 의미.
         }
 
         for label in buttonGroups.keys():
@@ -92,28 +92,13 @@ class Calculator(QWidget):
             self.display.clear()
         elif key in constantDics:
             self.display.setText(self.display.text() + constantDics[key])
-        elif key == functionList[0]:
-            n = self.display.text()
-            value = calcFunctions.factorial(n)
-            self.display.setText(str(value))
-        elif key == functionList[1]:
-            n = self.display.text()
-            value = calcFunctions.decToBin(n)
-            self.display.setText(str(value))
-        elif key == functionList[2]:
-            n = self.display.text()
-            value = calcFunctions.binToDec(n)
-            self.display.setText(str(value))
-        elif key == functionList[3]:
-            n = self.display.text()
-            value = calcFunctions.decToRoman(n)
+        elif key in functionDics:
+            value = functionDics[key](self.display.text())
             self.display.setText(str(value))
         else:
             self.display.setText(self.display.text() + key)
 
-
 if __name__ == '__main__':
-
     import sys
 
     app = QApplication(sys.argv)
