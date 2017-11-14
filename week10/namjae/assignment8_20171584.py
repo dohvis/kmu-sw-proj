@@ -86,7 +86,7 @@ class Calculator(QWidget):
             self.display.setText(self.display.text() + constantDic[key])
         elif key in functionDic.keys():
             n = eval(self.display.text())
-            value = eval(functionDic[key] + '(n)')
+            value = functionDic[key](n)
             self.display.setText(str(value))
         else:
             if self.display.text() in except_list:

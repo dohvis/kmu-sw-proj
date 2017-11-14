@@ -1,3 +1,5 @@
+import calcFunctions
+
 numPadList = [
     ['7', '8', '9'],
     ['4', '5', '6'],
@@ -20,8 +22,8 @@ constantDic = {
 }
 
 functionDic = {
-    'factorial (!)': 'calcFunctions.factorial',
-    '-> binary': 'calcFunctions.decToBin',
-    'binary -> dec': 'calcFunctions.binToDec',
-    '-> roman': 'calcFunctions.decToRoman',
+    'factorial (!)': calcFunctions.factorial,
+    '-> binary': calcFunctions.decToBin,
+    'binary -> dec': calcFunctions.binToDec,
+    '-> roman': calcFunctions.decToRoman,
 }
