@@ -27,13 +27,3 @@ functionDics = {
     'binary -> dec' : binToDec,
     '-> roman' : decToRoman,
 }
-
-# functionList = [
-#     'factorial (!)' : factorial,
-#     '-> binary' : decToBin,
-#     'binary -> dec' : binToDec,
-#     '-> roman' : decToRoman,
-# ]
-#
-# fuctionll = [x[0] for i in ]
-
