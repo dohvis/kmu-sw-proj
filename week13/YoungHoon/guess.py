@@ -28,4 +28,5 @@ class Guess:
                 return True
         else:
             self.numTries += 1  # 존재하지 않을 경우
-            return False
+
+        return False
