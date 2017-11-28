@@ -16,15 +16,11 @@ class Guess:
 
     def guess(self, character):
         self.guessedChars.add(character)  # 집합에 단어 추가
-        idx = 0
 
         if character in self.secretWord:  # 존재 할 경우
-            for chr in self.secretWord:  # 위치 찾기
+            for idx, chr in enumerate(self.secretWord):  # 위치 찾기
                 if chr == character:
                     self.wordList[idx] = self.secretWord[idx]
-                    idx += 1
-                else:
-                    idx += 1
 
             self.currentStatus = "".join(self.wordList)  # 현재 상태 업데이트
 
@@ -32,6 +28,4 @@ class Guess:
                 return True
         else:
             self.numTries += 1  # 존재하지 않을 경우
-
-            if self.numTries == 6:  # 기회 모두 소진
-                return False
+            return False
